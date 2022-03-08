@@ -2,18 +2,24 @@
 
 // Instanciando el request.
 //Permite hacer peticiones a algun servidor en la nube
+// importamos el modulo para hacer las peticiones
 let XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
-
+// direccion de la API
+let API = 'https://rickandmortyapi.com/api/character/';
+//funcion principal
 function fetchData(url_api, callback){
     //referencia al objeto XMLHttpRequest
+    // instanciamos la conexion
     let xhttp = new XMLHttpRequest();
     /* 
     A nuestra referencia xhttp le pasamos un LLAMADO 'open'
     donde: parametro1 = el metodo, parametro2 = la url,
     parametro3 = verificación si es asincrono o no, valor por defecto true
     */
+   // abrir una conexion con el metodo, la ruta y si es asincrono
     xhttp.open('GET', url_api, true);
     //Cuando el estado del objeto cambia, ejecutar la función:
+    // validacion del llamado
     xhttp.onreadystatechange = function (event){
         /*
         los estados que puede tener son:
@@ -26,6 +32,7 @@ function fetchData(url_api, callback){
         depende del servidor cuanto demore en cada estado haces un pedido por datos
         (request) y solo es aplicar lógica.
         */
+       // el state 4 es el ultimo de la peticion
         if(xhttp.readyState === 4){
             //Verificar estado, aqui un resumen de los casos mas comunes:
             /*
@@ -35,15 +42,47 @@ function fetchData(url_api, callback){
             ESTADO 4xx (400 - 499): Errores del lado del cliente. Indica se hizo mal la solicitud de datos.
             ESTADO 5xx (500 - 599): Errores del Servidor. Indica que fallo totalmente la ejecución.
             */
+           // verificamos que el status este en 200, que dice que todo bien, no un 400 o 500
             if(xhttp.status === 200){
                 //Estandar de node con callbacks, primer parametro error, segundo el resultado
+                //el primer valro es el error, y el siguiente el resultado
+                // ejecutamos el callback con resultado
                 callback(null, JSON.parse(xhttp.responseText))
             } else {
+                //si no es 200
                 const error = new Error('Error ' + url_api);
+                // matamos el proceso con un error
                 return callback(error, null)
             }
         }
     }
+    // por ultimo enviamos la peticion
     //Envio de la solicitud.
     xhttp.send();
 }
+
+// primero buscamos la lista de personajes
+fetchData(API, (error1, data1)  => {
+    // si error, matamos retornando un error
+    if(error1) return console.error(error1);
+    // luego buscamos en la api el id de Rick
+    fetchData(API + data1.results[0].id,(error2, data2) => {
+        // si error, matamos retornando un error
+        if(error2) return console.error(error2);
+        // por ultimo la consulta a la api que contiene su dimension
+        fetchData(data2.origin.url, (error3, data3) => {
+             // si error, matamos retornando un error
+             if(error3) return console.error(error3);
+             //mostramos los resultados :)
+             console.log(data1.info.count);
+             console.log(data2.name);
+             console.log(data3.dimension);
+             // rutas de las peticiones en orden
+             console.log(API);
+             console.log(API + data1.results[0].id);
+             console.log(data2.origin.url);
+        
+        
+        });
+    });
+});
