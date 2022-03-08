@@ -62,7 +62,7 @@ function fetchData(url_api, callback){
 }
 
 // primero buscamos la lista de personajes
-fetchData(API, (error1, data1)  => {
+fetchData(API, (error1, data1)  => {            //or        //fetchData(API, function (error1, data1) { })
     // si error, matamos retornando un error
     if(error1) return console.error(error1);
     // luego buscamos en la api el id de Rick
@@ -81,8 +81,6 @@ fetchData(API, (error1, data1)  => {
              console.log(API);
              console.log(API + data1.results[0].id);
              console.log(data2.origin.url);
-        
-        
         });
     });
 });
