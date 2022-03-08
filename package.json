@@ -9,7 +9,7 @@
     "keywords": [
         "callbacks",
         "promises",
-        "asynx"
+        "async"
     ],
     "author": "Oscar Barajas <oscar@platzi.com>",
     "license": "MIT",
