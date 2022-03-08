@@ -6,11 +6,14 @@
     "scripts": {
         "callback": "node src/callback/index.js"
     },
-"keywords": [
-    "callbacks",
-    "promises",
-    "asynx"
-],
-"author": "Oscar Barajas <oscar@platzi.com>",
-"license": "MIT"
+    "keywords": [
+        "callbacks",
+        "promises",
+        "asynx"
+    ],
+    "author": "Oscar Barajas <oscar@platzi.com>",
+    "license": "MIT",
+    "dependencies": {
+        "xmlhttprequest": "^1.8.0"
+    }
 }
